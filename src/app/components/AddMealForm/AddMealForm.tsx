@@ -1,12 +1,14 @@
-import { useDispatch } from "react-redux";
-import Image from "next/image";
-import { addMeal } from "@/app/redux/meals/meals.slice";
-import { z } from "zod";
+"use client";
+
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
+import { z } from "zod";
+import { useDispatch } from "react-redux";
+import { addMeal } from "@/app/redux/meals/meals.slice";
+import { useState, useEffect } from "react";
 import { Input } from "@/app/components/Input/Input";
 import { Button } from "@/app/components/Button/Button";
+import Image from "next/image";
 
 const mealSchema = z.object({
   name: z.string().min(1, "Name is required"),
@@ -34,14 +36,17 @@ export const AddMealForm = () => {
   const [previewImage, setPreviewImage] = useState<string | null>(null);
 
   const imageInput = watch("image");
-  if (imageInput && imageInput.length > 0 && !previewImage) {
-    const file = imageInput[0];
-    const reader = new FileReader();
-    reader.onload = () => {
-      setPreviewImage(reader.result as string);
-    };
-    reader.readAsDataURL(file);
-  }
+
+  useEffect(() => {
+    if (imageInput && imageInput.length > 0) {
+      const file = imageInput[0];
+      const reader = new FileReader();
+      reader.onload = () => {
+        setPreviewImage(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  }, [imageInput]);
 
   const onSubmit: SubmitHandler<MealFormData> = (data) => {
     const file = data.image[0];
@@ -92,9 +97,9 @@ export const AddMealForm = () => {
       {previewImage && (
         <div className="mt-4">
           <Image
-            src={previewImage || "/placeholder.jpg"}
+            src={previewImage}
             alt="Meal Preview"
-            width={200} 
+            width={200}
             height={200}
             className="w-32 h-32 object-cover rounded"
           />
