@@ -10,26 +10,30 @@ import { Input } from "@/app/components/Input/Input";
 import { Button } from "@/app/components/Button/Button";
 import Image from "next/image";
 
-const mealSchema = z.object({
-  name: z.string().min(1, "Name is required"),
-  category: z.string().min(1, "Category is required"),
-  area: z.string().min(1, "Area is required"),
-  image: z
-    .instanceof(FileList)
-    .refine((files) => files.length > 0, "Image is required"),
-});
-
-type MealFormData = z.infer<typeof mealSchema>;
-
 export const AddMealForm = () => {
+  const [mealSchema, setMealSchema] = useState<z.ZodSchema<any> | null>(null);
+
+  useEffect(() => {
+    const schema = z.object({
+      name: z.string().min(1, "Name is required"),
+      category: z.string().min(1, "Category is required"),
+      area: z.string().min(1, "Area is required"),
+      image: z
+        .instanceof(FileList)
+        .refine((files) => files.length > 0, "Image is required"),
+    });
+
+    setMealSchema(schema);
+  }, []);
+
   const {
     register,
     handleSubmit,
     formState: { errors },
     reset,
     watch,
-  } = useForm<MealFormData>({
-    resolver: zodResolver(mealSchema),
+  } = useForm({
+    resolver: mealSchema ? zodResolver(mealSchema) : undefined,
   });
 
   const dispatch = useDispatch();
@@ -48,7 +52,7 @@ export const AddMealForm = () => {
     }
   }, [imageInput]);
 
-  const onSubmit: SubmitHandler<MealFormData> = (data) => {
+  const onSubmit: SubmitHandler<any> = (data) => {
     const file = data.image[0];
     const reader = new FileReader();
 
@@ -68,31 +72,35 @@ export const AddMealForm = () => {
     reader.readAsDataURL(file);
   };
 
+  if (!mealSchema) {
+    return null;
+  }
+
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
       <Input
         label="Meal Name"
         placeholder="Meal Name"
         {...register("name")}
-        error={errors.name?.message}
+        error={errors.name?.message as string | undefined}
       />
       <Input
         label="Category"
         placeholder="Category"
         {...register("category")}
-        error={errors.category?.message}
+        error={errors.name?.message as string | undefined}
       />
       <Input
         label="Area"
         placeholder="Area"
         {...register("area")}
-        error={errors.area?.message}
+        error={errors.name?.message as string | undefined}
       />
       <Input
         type="file"
         accept="image/*"
         {...register("image")}
-        error={errors.image?.message}
+        error={errors.name?.message as string | undefined}
       />
       {previewImage && (
         <div className="mt-4">
