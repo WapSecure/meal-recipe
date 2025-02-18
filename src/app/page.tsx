@@ -16,7 +16,6 @@ import {
 } from "./utils/constants";
 import { Input } from "@/app/components/Input/Input";
 import { Button } from "@/app/components/Button/Button";
-import { Meal } from "@/app/types"; // Import the Meal type
 
 export default function Home() {
   const [searchTerm, setSearchTerm] = useState("");

@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { fetchMealsByCategory } from "@/app/api/meals/meal";
+import { Meal } from "@/app/types";
 
 interface MealTableProps {
   category: string;
@@ -36,7 +37,7 @@ export const MealTable = ({ category }: MealTableProps) => {
             key={rowIndex}
             className="bg-gray-50 dark:bg-gray-900 text-black dark:text-white"
           >
-            {row.map((meal: any) => (
+            {row.map((meal: Meal) => (
               <td
                 key={meal.idMeal}
                 className="p-2 border border-gray-300 dark:border-gray-700"

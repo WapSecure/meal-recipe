@@ -1,4 +1,5 @@
 import { useDispatch } from "react-redux";
+import Image from "next/image";
 import { addMeal } from "@/app/redux/meals/meals.slice";
 import { z } from "zod";
 import { useForm, SubmitHandler } from "react-hook-form";
@@ -90,9 +91,11 @@ export const AddMealForm = () => {
       />
       {previewImage && (
         <div className="mt-4">
-          <img
-            src={previewImage}
+          <Image
+            src={previewImage || "/placeholder.jpg"}
             alt="Meal Preview"
+            width={200} 
+            height={200}
             className="w-32 h-32 object-cover rounded"
           />
         </div>
