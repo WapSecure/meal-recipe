@@ -1,6 +1,5 @@
-"use client";
 import { useQuery } from "@tanstack/react-query";
-import { fetchMealsByCategory } from "../../api/meals/meal";
+import { fetchMealsByCategory } from "@/app/api/meals/meal";
 
 interface MealTableProps {
   category: string;
@@ -13,8 +12,10 @@ export const MealTable = ({ category }: MealTableProps) => {
   });
 
   const mealRows = [];
-  for (let i = 0; i < meals?.length; i += 3) {
-    mealRows.push(meals.slice(i, i + 3));
+  if (meals) {
+    for (let i = 0; i < meals.length; i += 3) {
+      mealRows.push(meals.slice(i, i + 3));
+    }
   }
 
   return (

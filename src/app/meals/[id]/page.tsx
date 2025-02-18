@@ -1,10 +1,11 @@
 "use client";
 
 import { useEffect } from "react";
-import { useParams, useRouter } from "next/navigation"; // Import useRouter for the back button
-import { useMealDetails } from "../../hooks/useMealDetaills/useMealDetails";
-import { MealTable } from "../../components/MealTable/MealTable";
+import { useParams, useRouter } from "next/navigation";
+import { useMealDetails } from "@/app/hooks/useMealDetaills/useMealDetails";
+import { MealTable } from "@/app/components/MealTable/MealTable";
 import LoadingSpinner from "@/app/assets/icons/components/LoadingSpinner";
+import Image from "next/image";
 
 export default function MealDetailsPage() {
   const params = useParams();
@@ -44,9 +45,11 @@ export default function MealDetailsPage() {
         &larr; Back to Meals
       </button>
       <div className="flex flex-col items-center justify-center mb-6">
-        <img
+        <Image
           src={meal.strMealThumb}
           alt={meal.strMeal}
+          width={500}
+          height={300}
           className="w-80 h-auto rounded-lg shadow-lg mb-4"
         />
         <h1 className="text-3xl font-bold text-center text-black dark:text-white">

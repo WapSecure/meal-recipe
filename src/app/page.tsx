@@ -16,6 +16,7 @@ import {
 } from "./utils/constants";
 import { Input } from "@/app/components/Input/Input";
 import { Button } from "@/app/components/Button/Button";
+import { Meal } from "@/app/types"; // Import the Meal type
 
 export default function Home() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -111,9 +112,21 @@ export default function Home() {
         )}
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {currentMeals.map((meal: any, index: number) => (
-            <MealCard key={meal.idMeal || `meal-${index}`} {...meal} />
-          ))}
+          {currentMeals.map((meal, index) => {
+            const normalizedMeal = {
+              id: meal.id,
+              strMeal: meal.strMeal,
+              strMealThumb: meal.strMealThumb,
+              strCategory: meal.strCategory,
+              strArea: meal.strArea,
+            };
+            return (
+              <MealCard
+                key={normalizedMeal.id || `meal-${index}`}
+                {...normalizedMeal}
+              />
+            );
+          })}
         </div>
         {totalPages > 1 && (
           <div className="flex justify-center mt-8 space-x-2">
